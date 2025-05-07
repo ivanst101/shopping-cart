@@ -43,7 +43,7 @@ function CartButtons({ item, fromCart }) {
               </button>
             </div>
             <button
-              className="bg-pink-300 mx-auto mt-2 block rounded px-2 py-1 text-xs text-white hover:bg-pink-400"
+              className="bg-green-300 mx-auto mt-2 block rounded px-2 py-1 text-xs text-white hover:bg-green-400"
               onClick={() => removeFromCart(item)}
             >
               Remove

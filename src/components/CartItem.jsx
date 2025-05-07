@@ -17,7 +17,7 @@ function CartItem({ item, fromCart }) {
         } duration-500`}
       />
       <div className="absolute bottom-3 left-5">
-        <h1 className={`text-white bg-pink-400 ${fromCart && "text-sm"}`}>
+        <h1 className={`text-white bg-blue-400 ${fromCart && "text-sm"}`}>
           {name}
         </h1>
         <span className="text-sm">${price}</span>

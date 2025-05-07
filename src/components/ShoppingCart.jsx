@@ -49,7 +49,7 @@ function ShoppingCart() {
             onClick={() => setIsOpen(true)}
           >
             <ShoppingCartIcon className="text-xs text-white" />
-            <span className="w-6 h-6 bg-pink-400 absolute -bottom-4 -left-2 grid place-items-center border-gray-300 rounded-full text-sm text-white">
+            <span className="w-6 h-6 bg-blue-400 absolute -bottom-4 -left-2 grid place-items-center border-gray-300 rounded-full text-sm text-white">
               {cartItems.length > 9 ? "9+" : cartItems.length}
             </span>
           </button>
