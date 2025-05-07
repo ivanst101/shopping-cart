@@ -1,5 +1,5 @@
 import { allProducts } from "../assets/data";
-import { createContext } from "react";
+import { createContext, useCallback, useMemo } from "react";
 import { useState } from "react";
 import { useContext } from "react";
 import {
@@ -13,11 +13,11 @@ const CartContext = createContext();
 function CartProvider({ children }) {
   const [allItems, setAllItems] = useState([]);
 
-  function setItems() {
+  const setItems = useCallback(() => {
     setAllItems(allProducts);
-  }
+  }, []);
 
-  function addToCart(item) {
+  const addToCart = useCallback((item) => {
     setAllItems((prevItems) => {
       return prevItems.map((prevItem) => {
         return prevItem.id === item.id
@@ -25,9 +25,9 @@ function CartProvider({ children }) {
           : prevItem;
       });
     });
-  }
+  }, []);
 
-  function removeFromCart(item) {
+  const removeFromCart = useCallback((item) => {
     setAllItems((prevItems) => {
       return prevItems.map((prevItem) => {
         return prevItem.id === item.id
@@ -35,9 +35,9 @@ function CartProvider({ children }) {
           : prevItem;
       });
     });
-  }
+  }, []);
 
-  function updateQuantity(cartItem, amount) {
+  const updateQuantity = useCallback((cartItem, amount) => {
     setAllItems((prevItems) => {
       return prevItems.map((prevItem) => {
         return prevItem.id === cartItem.id
@@ -45,16 +45,16 @@ function CartProvider({ children }) {
           : prevItem;
       });
     });
-  }
+  }, []);
 
-  function setLocalStorage() {
+  const setLocalStorage = useCallback(() => {
     if (allItems.length !== 0) {
       const inCartItems = allItems.filter((item) => item.inCart);
       setItemInStorage("cartItems", inCartItems);
     }
-  }
+  }, [allItems]);
 
-  function setCartItemsFromStorage() {
+  const setCartItemsFromStorage = useCallback(() => {
     if (getItemFromStorage("cartItems") !== null) {
       const storageItems = getParsedItemFromStorage("cartItems");
 
@@ -67,23 +67,30 @@ function CartProvider({ children }) {
         });
       });
     }
-  }
+  }, []);
 
-  return (
-    <CartContext.Provider
-      value={{
-        allItems,
-        setItems,
-        addToCart,
-        removeFromCart,
-        updateQuantity,
-        setLocalStorage,
-        setCartItemsFromStorage,
-      }}
-    >
-      {children}
-    </CartContext.Provider>
+  const value = useMemo(
+    () => ({
+      allItems,
+      setItems,
+      addToCart,
+      removeFromCart,
+      updateQuantity,
+      setLocalStorage,
+      setCartItemsFromStorage,
+    }),
+    [
+      allItems,
+      setItems,
+      addToCart,
+      removeFromCart,
+      updateQuantity,
+      setLocalStorage,
+      setCartItemsFromStorage,
+    ]
   );
+
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
 
 function useCart() {
