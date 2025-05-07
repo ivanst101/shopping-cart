@@ -1,7 +1,12 @@
+import CartButtons from "./CartButtons";
+
 function CartItem({ item }) {
   const { id, name, imageUrl, description, price } = item;
   return (
-    <div className="group relative flex flex-col gap-y-2 border border-zinc-200 rounded-md bg-white p-10 m-6">
+    <div
+      key={id}
+      className="group relative flex flex-col gap-y-2 border border-zinc-200 rounded-md bg-white p-9 m-6"
+    >
       <img
         src={imageUrl}
         alt={name}
@@ -13,6 +18,7 @@ function CartItem({ item }) {
         <h1 className="text-sm bg-pink-400 text-white">{name}</h1>
         <span className="text-sm">${price}</span>
       </div>
+      <CartButtons item={item} />
     </div>
   );
 }
