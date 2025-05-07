@@ -22,13 +22,6 @@ function App() {
     }
   }, []);
 
-  // useEffect(
-  //   function () {
-  //     console.log(allItems);
-  //   },
-  //   [allItems]
-  // );
-
   return (
     <div className="grid place-items-center py-20">
       <h1 className="lg:text-5xl md:text-4xl text-3xl italic text-gray-500 mb-16 px-10 text-center">
