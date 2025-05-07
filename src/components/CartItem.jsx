@@ -1,7 +1,7 @@
 import CartButtons from "./CartButtons";
 
-function CartItem({ item }) {
-  const { id, name, imageUrl, description, price } = item;
+function CartItem({ item, fromCart }) {
+  const { id, name, imageUrl, price } = item;
   return (
     <div
       key={id}
@@ -12,13 +12,17 @@ function CartItem({ item }) {
         alt={name}
         width={300}
         height={300}
-        className="group-hover:-translate-y-2 transition-all duration-500"
+        className={`${
+          !fromCart && "group-hover:-translate-y-2 transition-all"
+        } duration-500`}
       />
       <div className="absolute bottom-3 left-5">
-        <h1 className="text-sm bg-pink-400 text-white">{name}</h1>
+        <h1 className={`text-white bg-pink-400 ${fromCart && "text-sm"}`}>
+          {name}
+        </h1>
         <span className="text-sm">${price}</span>
       </div>
-      <CartButtons item={item} />
+      <CartButtons item={item} fromCart={fromCart} />
     </div>
   );
 }

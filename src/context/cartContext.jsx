@@ -1,5 +1,5 @@
-import { createContext } from "react";
 import { allProducts } from "../assets/data";
+import { createContext } from "react";
 import { useState } from "react";
 import { useContext } from "react";
 
@@ -15,9 +15,9 @@ function CartProvider({ children }) {
   function addToCart(item) {
     setAllItems((prevItems) => {
       return prevItems.map((prevItem) => {
-        if (prevItem.inCart) {
-          return prevItem;
-        }
+        // if (prevItem.inCart) {
+        //   return prevItem;
+        // }
 
         return prevItem.id === item.id
           ? { ...prevItem, inCart: true }
