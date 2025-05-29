@@ -1,5 +1,5 @@
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import CartItem from "./components/CartItem";
 import { useCart } from "./context/cartContext";
 import ShoppingCart from "./components/ShoppingCart";
@@ -15,6 +15,7 @@ function App() {
   const [searchItem, setSearchItem] = useState("");
   const [filterProducts, setFilterProducts] = useState(allItems);
   const [loading, setLoading] = useState(true);
+  const [sorting, setSorting] = useState("default");
 
   function handleSearchItem(e) {
     const searched = e.target.value;
@@ -25,6 +26,32 @@ function App() {
     );
     setFilterProducts(filteredProducts);
   }
+
+  function handleSorting(e) {
+    setSorting(e.target.value);
+  }
+
+  const sortedAndFilteredProducts = useMemo(() => {
+    let filtered = apiProducts.filter((product) =>
+      product.name.toLowerCase().includes(searchItem.toLowerCase())
+    );
+
+    if (sorting === "pasc") {
+      filtered.sort((a, b) => a.price - b.price);
+    } else if (sorting === "pdesc") {
+      filtered.sort((a, b) => b.price - a.price);
+    } else if (sorting === "nasc") {
+      filtered.sort((a, b) =>
+        a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+      );
+    } else if (sorting === "ndesc") {
+      filtered.sort((a, b) =>
+        b.name.toLowerCase().localeCompare(a.name.toLowerCase())
+      );
+    }
+
+    return filtered;
+  }, [apiProducts, searchItem, sorting]);
 
   useEffect(
     function () {
@@ -53,23 +80,42 @@ function App() {
       <h1 className="lg:text-5xl md:text-4xl text-3xl italic text-gray-500 mb-16 px-10 text-center">
         Trend Alert: Must-Have Outfits of the Season
       </h1>
-      Search products:
-      <input
-        type="text"
-        name="search"
-        id="search"
-        value={searchItem}
-        onChange={handleSearchItem}
-        className="border-2 border-gray-500 border-solid"
-      />
+      <div className="w-auto gap-14 flex justify-between">
+        <div className="filter">
+          Search products:
+          <input
+            type="text"
+            name="search"
+            id="search"
+            value={searchItem}
+            onChange={handleSearchItem}
+            className="border-2 border-gray-500 border-solid"
+          />
+        </div>
+        <div className="select">
+          <select
+            name="select"
+            id="select"
+            value={sorting}
+            onChange={handleSorting}
+          >
+            <option value="default">Sort by</option>
+            <option value="pasc">Price ascending</option>
+            <option value="pdesc">Price descending</option>
+            <option value="nasc">Name ascending</option>
+            <option value="ndesc">Name descending</option>
+          </select>
+        </div>
+      </div>
+
       <ShoppingCart />
       <div className="grid xl:grid-cols-3 lg:grid-cols-2 place-items-start gap-8 xl:px-6 px-10">
         {loading ? (
           <p>Loading..</p>
-        ) : filterProducts.length === 0 ? (
+        ) : sortedAndFilteredProducts.length === 0 ? (
           <p>No products found</p>
         ) : (
-          filterProducts.map((item) => {
+          sortedAndFilteredProducts.map((item) => {
             return <CartItem key={item.id} item={item} />;
           })
         )}
